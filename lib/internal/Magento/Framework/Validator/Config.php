@@ -289,16 +289,23 @@ class Config extends \Magento\Framework\Config\AbstractXml
             $arguments = [];
             /** @var $node \DOMElement */
             foreach ($children['argument'] as $node) {
+                $argumentName = $node->hasAttribute('name') ? $node->getAttribute('name') : null;
                 $nodeChildren = $this->_collectChildren($node);
                 $callback = $this->_readCallback($nodeChildren);
                 $options = $this->_readOptions($nodeChildren);
                 if ($callback) {
-                    $arguments[] = $callback[0];
+                    $argumentValue = $callback[0];
                 } elseif ($options) {
-                    $arguments[] = $options;
+                    $argumentValue = $options;
                 } else {
-                    $argument = $node->textContent;
-                    $arguments[] = new Option(trim($argument));
+                    $nodeValue = $node->textContent;
+                    $argumentValue = new Option(trim($nodeValue));
+                }
+
+                if (is_null($argumentName)) {
+                    $arguments[] = $argumentValue;
+                } else {
+                    $arguments[$argumentName] = $argumentValue;
                 }
             }
             return $arguments;

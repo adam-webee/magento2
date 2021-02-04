@@ -111,6 +111,7 @@
             </xs:sequence>
             <xs:element name="callback" type="callback" />
         </xs:choice>
+        <xs:attribute name="name" type="xs:string"/>
     </xs:complexType>
 
     <xs:complexType name="callback">
